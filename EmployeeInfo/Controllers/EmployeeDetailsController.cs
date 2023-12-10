@@ -3,6 +3,10 @@ using EmployeeInfo.Models;
 using EmployeeInfo.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EmployeeInfo.Controllers
 {
@@ -23,9 +27,7 @@ namespace EmployeeInfo.Controllers
         [HttpGet]
         public IActionResult GetEmployeeDetails()
         {
-            AWSSecretManager yyy = new AWSSecretManager();
-           var tttt= yyy.GetSecret();
-            List<EmployeeDetails> employeeList = new List<EmployeeDetails>();
+            List<EmployeeDetailsInfo> employeeList = new List<EmployeeDetailsInfo>();
             employeeList = _employeeRepo.GetEmployeeDetails();
             if (employeeList.Count > 0)
             {
@@ -40,7 +42,7 @@ namespace EmployeeInfo.Controllers
         [HttpGet("GetEmployee")]
         public IActionResult GetEmployeeDetailsById(int Id)
         {
-            EmployeeDetails? employeeDetails = new EmployeeDetails();
+            EmployeeDetailsInfo? employeeDetails = new EmployeeDetailsInfo();
             employeeDetails = _employeeRepo.GetEmployeeDetails(Id);
             if (employeeDetails.EmployeeId != 0)
             {
@@ -53,7 +55,7 @@ namespace EmployeeInfo.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEmployeeDetails([FromBody] EmployeeDetails employeeDetails)
+        public IActionResult AddEmployeeDetails([FromBody] EmployeeDetailsInfo employeeDetails)
         {
             if (employeeDetails.EmployeeId != 0)
             {
@@ -70,7 +72,7 @@ namespace EmployeeInfo.Controllers
 
 
         [HttpPut]
-        public IActionResult Update(int Id, EmployeeDetails employeeDetails)
+        public IActionResult Update(int Id, EmployeeDetailsInfo employeeDetails)
         {
             if (Id == employeeDetails.EmployeeId)
             {
@@ -85,11 +87,12 @@ namespace EmployeeInfo.Controllers
             }
         }
 
+       
 
         [HttpDelete]
         public IActionResult Delete(int Id)
         {
-            EmployeeDetails? employeeDetails = new EmployeeDetails();
+            EmployeeDetailsInfo? employeeDetails = new EmployeeDetailsInfo();
             employeeDetails = _employeeRepo.GetEmployeeDetails(Id);
             if (employeeDetails.EmployeeId != 0)
             {
@@ -105,4 +108,5 @@ namespace EmployeeInfo.Controllers
             }
         }
     }
+
 }

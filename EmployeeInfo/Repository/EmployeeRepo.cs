@@ -11,19 +11,19 @@ namespace EmployeeInfo.Repository
             _context = context;
         }
 
-        public List<EmployeeDetails> GetEmployeeDetails(string IsDeleted)
+        public List<EmployeeDetailsInfo> GetEmployeeDetails(string IsDeleted)
         {
-            return _context.EmployeeDetails.Where(x => x.IsActive == IsDeleted).ToList();
+            return _context.EmployeeDetailsInfo.Where(x => x.IsActive == IsDeleted).ToList();
         }
 
-        public EmployeeDetails GetEmployeeDetails(int Id)
+        public EmployeeDetailsInfo GetEmployeeDetails(int Id)
         {
-            return _context.EmployeeDetails.Find(Id);
+            return _context.EmployeeDetailsInfo.Find(Id);
         }
 
-        public int UpdateEmployeeDetails(EmployeeDetails employeeDetails)
+        public int UpdateEmployeeDetails(EmployeeDetailsInfo employeeDetails)
         {
-            if (_context.EmployeeDetails != null)
+            if (_context.EmployeeDetailsInfo != null)
             {
                 _context.Entry(employeeDetails).State = EntityState.Modified;
                 return _context.SaveChanges();
@@ -34,11 +34,11 @@ namespace EmployeeInfo.Repository
             }
         }
 
-        public int AddEmployeeDetails(EmployeeDetails employeeDetails)
+        public int AddEmployeeDetails(EmployeeDetailsInfo employeeDetails)
         {
-            if (_context.EmployeeDetails != null)
+            if (_context.EmployeeDetailsInfo != null)
             {
-                _context.EmployeeDetails.Add(employeeDetails);
+                _context.EmployeeDetailsInfo.Add(employeeDetails);
                 return _context.SaveChanges();
             }
             else
@@ -49,9 +49,9 @@ namespace EmployeeInfo.Repository
 
         public int DeleteEmployeeDetails(int Id)
         {
-            if (_context.EmployeeDetails != null)
+            if (_context.EmployeeDetailsInfo != null)
             {
-                var employeeDetails = _context.EmployeeDetails.Find(Id);
+                var employeeDetails = _context.EmployeeDetailsInfo.Find(Id);
                 employeeDetails.IsActive = "N";
                 _context.Entry(employeeDetails).State = EntityState.Modified;
                 return _context.SaveChanges();

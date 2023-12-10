@@ -2,12 +2,17 @@
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 using Amazon.SecretsManager.Model.Internal.MarshallTransformations;
+using EmployeeInfo.Models;
+using Microsoft.AspNetCore.DataProtection;
+using Newtonsoft.Json;
+using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EmployeeInfo.AWS_SecretManager
 {
-    public  class AWSSecretManager
+    public static class AWSSecretManager
     {
-        public async Task<string> GetSecret()
+        public static  string GetSecret()
         {
             string secretName = "DatabaseSecret";
             string region = "us-east-1";
@@ -24,7 +29,7 @@ namespace EmployeeInfo.AWS_SecretManager
 
             try
             {
-                response =  await client.GetSecretValueAsync(request);
+                response = client.GetSecretValueAsync(request).Result;
             }
             catch (Exception e)
             {
@@ -32,16 +37,27 @@ namespace EmployeeInfo.AWS_SecretManager
                 // https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
                 throw e;
             }
+            string secret = "";
+            if (response.SecretString != null)
+            {
+                return secret = response.SecretString;
 
-            return response.SecretString;
+                // Your code goes here
+            }
+            return secret = response.SecretString;
+           
+        }
+        public static  string createconnectionstring()
+        {
+            var SecretManagerSettings =  GetSecret();
+            var secretManagerValues = JsonConvert.DeserializeObject<SecretManagerValues>(SecretManagerSettings);
 
-            // Your code goes here
+            string username = secretManagerValues.username;
+            string password = Encryption.DecryptString("b14ca5898a4e4133bbce2ea2315a1916",secretManagerValues.password);
+            string host = secretManagerValues.host;
+            string port = secretManagerValues.port;
+            return $"Host = {host}; Port = {port}; Username = {username}; Password = {password}; Database = EmployeeDetailsInfo";
         }
 
-        //public async Task<string> createconnectionstring()
-        //{
-        //    var SecretManagerSettings=await GetSecret();
-        //    string host= SecretManagerSettings.
-        //}
     }
 }

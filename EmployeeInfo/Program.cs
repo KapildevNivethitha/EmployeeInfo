@@ -9,6 +9,7 @@ using AWS.Logger.AspNetCore;
 using AWS.Logger.SeriLog;
 using AWS.Logger;
 using Serilog;
+using EmployeeInfo.AWS_SecretManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,9 +24,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(AWSSecretManager.createconnectionstring());
 });
 builder.Services.AddScoped<IEmployeeRepo , EmployeeRepo>();
+
+builder.Services.AddCors();
 
 AWSLoggerConfig configuration = new AWSLoggerConfig("SeriLog.DemoLogGroup");
 configuration.Region = "us-east-1";
@@ -47,7 +50,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors(x=>x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin=>true).AllowCredentials());
 app.UseAuthorization();
 
 app.MapControllers();

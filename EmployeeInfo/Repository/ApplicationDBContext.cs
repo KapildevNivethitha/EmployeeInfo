@@ -10,6 +10,6 @@ namespace EmployeeInfo.Repository
         {
         }
 
-        public DbSet<EmployeeDetails> EmployeeDetails { get; set; }
+        public DbSet<EmployeeDetailsInfo> EmployeeDetailsInfo { get; set; }
     }
 }
